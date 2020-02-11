@@ -3,12 +3,13 @@
         <section class="hero is-info is-large" :style="movieData.backdrop_path ? addStyle(movieData.backdrop_path) : ''">
             <div class="hero-body">
                 <div class="container">
-                <h1 class="title">
+                <h1 class="title" style="text-align: left; font-size: 70px;">
                     {{movieData.title}}
                 </h1>
-                <h2 class="subtitle" v-if="movieData.tagline">
+                <h2 class="subtitle" v-if="movieData.tagline"  style="text-align: left">
                     {{movieData.tagline}}
                 </h2>
+                <h1 class="release-date" v-if="movieData.release_date">{{ setDate(movieData.release_date)}}</h1>
                 </div>
             </div>
         </section>
@@ -17,11 +18,10 @@
             <div class="movie-info">
                 <div class="columns">
                     <div class="column is-two-fifths">
-                        <img :src="setImageLink(movieData.poster_path)" alt="">
+                        <img class="movie-poster" :src="setImageLink(movieData.poster_path)" alt="">
                     </div>
                     <div class="column">
-                        <h1>{{movieData.title}}</h1>
-                        <label for="" v-if="movieData.genres.length > 0">Genre</label>
+                        <label class="movie-label" for="" v-if="movieData.genres.length > 0">Genre</label>
                         <p>{{getGenre(movieData.genres || [] )}}</p>
                         <label for="" v-if="movieData.overview">Plot</label>
                         <p>{{movieData.overview}}</p>
@@ -50,10 +50,13 @@ export default {
     },
 
     methods: {
+        setDate(date_value) {
+            return date_value.substring(0, 4)
+        },
         addStyle(backdrop_path) {
             let styleObject = {
                 backgroundImage: 'url('+this.setImageLink(backdrop_path)+')',
-                filter: 'grayscale(100%)'
+                backgroundSize: 'cover'
             }
             return styleObject;
         },
@@ -99,6 +102,20 @@ export default {
 .movie-info {
     padding: 50px 10px 10px 10px;
 }
+
+.release-date {
+    text-align: right;
+    font-size: 10em;
+    position: absolute;
+    right: 0;
+    font-weight: bold;
+    opacity: 0.5;
+}
+
+.movie-poster {
+    height: 350px;
+}
+
 </style>
 
 
