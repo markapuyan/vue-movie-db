@@ -1,19 +1,37 @@
 <template>
-    <div> {{ id }}
-        <div class="columns">
-            <div class="column is-two-fifths">
-                <img :src="getImageLink(movieData.poster_path)" alt="">
+    <Fragment>
+        <section class="hero is-info is-large" :style="movieData.backdrop_path ? addStyle(movieData.backdrop_path) : ''">
+            <div class="hero-body">
+                <div class="container">
+                <h1 class="title">
+                    {{movieData.title}}
+                </h1>
+                <h2 class="subtitle" v-if="movieData.tagline">
+                    {{movieData.tagline}}
+                </h2>
+                </div>
             </div>
-            <div class="column">
-                <h1>{{movieData.title}}</h1>
-                <label for="" v-if="movieData.genres.length > 0">Genre</label>
-                <p>{{getGenre(movieData.genres || [] )}}</p>
-                <label for="" v-if="movieData.overview">Plot</label>
-                <p>{{movieData.overview}}</p>
+        </section>
+
+        <div class="container">
+            <div class="movie-info">
+                <div class="columns">
+                    <div class="column is-two-fifths">
+                        <img :src="setImageLink(movieData.poster_path)" alt="">
+                    </div>
+                    <div class="column">
+                        <h1>{{movieData.title}}</h1>
+                        <label for="" v-if="movieData.genres.length > 0">Genre</label>
+                        <p>{{getGenre(movieData.genres || [] )}}</p>
+                        <label for="" v-if="movieData.overview">Plot</label>
+                        <p>{{movieData.overview}}</p>
+                    </div>
+                </div>
             </div>
         </div>
-        <!-- <p>{{movieData}}</p> -->
-    </div>
+    </Fragment>
+
+
 </template>
 <script>
 export default {
@@ -32,9 +50,18 @@ export default {
     },
 
     methods: {
-        getImageLink(imgSource) {
+        addStyle(backdrop_path) {
+            let styleObject = {
+                backgroundImage: 'url('+this.setImageLink(backdrop_path)+')',
+                filter: 'grayscale(100%)'
+            }
+            return styleObject;
+        },
+
+        setImageLink(imgSource) {
             return 'https://image.tmdb.org/t/p/original'+imgSource;
         },
+
         getGenre(genre) {
             console.log(genre)
             let genreList = []
@@ -68,4 +95,10 @@ export default {
 
 }
 </script>
+<style>
+.movie-info {
+    padding: 50px 10px 10px 10px;
+}
+</style>
+
 
