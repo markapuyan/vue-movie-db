@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Main from '@/pages/Main'
+import MovieInfo from '@/components/MovieInfo/MovieInfoComponent'
 Vue.use(VueRouter)
 
 const routes = [
@@ -8,6 +9,11 @@ const routes = [
     path: '/',
     name: 'Main',
     component: Main
+  },
+  {
+    path: '/movie/:id',
+    name: 'MovieInfo',
+    component: MovieInfo
   }
 ]
 
