@@ -6,6 +6,9 @@ import Buefy from 'buefy'
 import 'buefy/dist/buefy.css'
 import axios from 'axios'
 import VueLodash from 'vue-lodash'
+import VueCarousel from 'vue-carousel';
+Vue.use(VueCarousel);
+
 
 const options = { name: 'lodash' } // customize the way you want to call it
 Vue.use(VueLodash, options) // options is optional

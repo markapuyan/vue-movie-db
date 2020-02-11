@@ -5,26 +5,29 @@
             <div class="section-filter">
                 <b-radio v-for="trendingItem in trending"
                     :key="trendingItem.id"
-                    v-model="radio"
+                    v-model="trendValue"
                     :name="trendingItem.name"
                     :native-value="trendingItem.value"
                     type="is-success"
-                     @click.native="sample(trendingItem)">
+                     @click.native="setTrend(trendingItem)">
                     {{trendingItem.name}}
-
                 </b-radio>
             </div>
-            <div class="columns">
-                <!-- <MovieItem v-for="item in data.slice(0, 6)" :key="item.id" :item="item" /> -->
+            <div class="section-body">
+                <div class="container">
+                    <carousel :perPage="5">
+                        <slide v-for="item in data" :key="item.id" >
+                            <MovieItem :item="item" />
+                        </slide>
+                    </carousel>
+                </div>
             </div>
         </section>
-
     </div>
-
 </template>
 
 <script>
-// import MovieItem from '@/components/MovieItems/MovieItem/MovieItemComponent'
+import MovieItem from '@/components/MovieItems/MovieItem/MovieItemComponent'
 export default {
     data() {
         return {
@@ -39,20 +42,17 @@ export default {
                 name: 'TV Show',
                 value: 'tv'
             }],
-            radio: 'movie'
+            trendValue: 'movie'
         }
     },
     components: {
-        // MovieItem
+        MovieItem
     },
 
     methods: {
-        sample(value) {
-            if(this.radio != value) {
-                this.getFeaturedMovie()
-                this.radio = value;
-            }
-
+        setTrend(value) {
+            this.radio = value.value
+            this.getFeaturedMovie()
         },
         getFeaturedMovie() {
             const baseURI = `https://api.themoviedb.org/3/trending/`+this.radio+`/day?api_key=0466c61e514a5b0f3783669a41c3b768`
@@ -86,7 +86,7 @@ section {
     float: left;
     display: inline;
 }
-section .columns {
+section .section-body {
     clear: both;
 }
 
