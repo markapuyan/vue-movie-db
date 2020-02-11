@@ -1,22 +1,32 @@
 <template>
-        <div class="column is-2">
+        <div class="column is-2 is-narrow-mobile">
             <div class="card">
-            <div class="card-image">
-                <figure class="image is-4by3">
-                    <img src="https://bulma.io/images/placeholders/1280x960.png" alt="Placeholder image">
-                </figure>
-            </div>
-            <div class="card-content">
-                <div class="content">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                Phasellus nec iaculis mauris. <a>@bulmaio</a>.
+                <div class="card-image">
+                    <img :src="getImageLink(item.poster_path)" alt="">
+                    <p><strong style="color: #2B333E">{{item.title}}</strong> <b-tag rounded >{{item.vote_average}} /10</b-tag></p>
+                    <br>
                 </div>
-            </div>
             </div>
         </div>
 </template>
 <script>
 export default {
-    
+    props: {
+        item: Object
+    },
+
+    data() {
+        return {
+
+        }
+    },
+    methods: {
+        getImageLink(imgSource) {
+            return 'https://image.tmdb.org/t/p/original'+imgSource;
+        },
+    },
+
+    mounted() {
+    },
 }
 </script>
