@@ -69,14 +69,12 @@ export default {
             .finally(() => {
                 this.isFetching = false
             })
-        }, 500)
-        ,
+        }, 500),
 
         goTo(option) {
             this.selected = option;
-            console.log('SELECTED', this.selected)
+            this.$router.push({path: `/movie/${this.selected.id}`})
         }
-    },
-
+    }
 }
 </script>
