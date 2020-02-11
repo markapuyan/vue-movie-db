@@ -1,28 +1,30 @@
 <template>
-    <div class="main">
-        <section id="trending">
-            <h3 class="section-title">Trending</h3>
-            <div class="section-filter">
-                <b-radio v-for="trendingItem in trending"
-                    :key="trendingItem.id"
-                    v-model="trendValue"
-                    :name="trendingItem.name"
-                    :native-value="trendingItem.value"
-                    type="is-success"
-                     @click.native="setTrend(trendingItem)">
-                    {{trendingItem.name}}
-                </b-radio>
-            </div>
-            <div class="section-body">
-                <div class="container">
-                    <carousel :perPage="5">
-                        <slide v-for="item in data" :key="item.id" >
-                            <MovieItem :item="item" />
-                        </slide>
-                    </carousel>
+    <div class="container">
+        <div class="main">
+            <section id="trending">
+                <h3 class="section-title">Trending</h3>
+                <div class="section-filter">
+                    <b-radio v-for="trendingItem in trending"
+                        :key="trendingItem.id"
+                        v-model="trendValue"
+                        :name="trendingItem.name"
+                        :native-value="trendingItem.value"
+                        type="is-success"
+                        @click.native="setTrend(trendingItem)">
+                        {{trendingItem.name}}
+                    </b-radio>
                 </div>
-            </div>
-        </section>
+                <div class="section-body">
+                    <div class="container">
+                        <carousel :perPage="5">
+                            <slide v-for="item in data" :key="item.id" >
+                                <MovieItem :item="item" />
+                            </slide>
+                        </carousel>
+                    </div>
+                </div>
+            </section>
+        </div>
     </div>
 </template>
 
