@@ -3,12 +3,9 @@
         <section class="hero is-info is-large" :style="movieData.backdrop_path ? addStyle(movieData.backdrop_path) : ''">
             <div class="hero-body">
                 <div class="container">
-                <h1 class="title" style="text-align: left; font-size: 70px;">
+                <h1 class="title movie-title">
                     {{movieData.title}}
                 </h1>
-                <h2 class="subtitle" v-if="movieData.tagline"  style="text-align: left">
-                    {{movieData.tagline}}
-                </h2>
                 <h1 class="release-date" v-if="movieData.release_date">{{ setDate(movieData.release_date)}}</h1>
                 </div>
             </div>
@@ -18,13 +15,35 @@
             <div class="movie-info">
                 <div class="columns">
                     <div class="column is-two-fifths">
-                        <img class="movie-poster" :src="setImageLink(movieData.poster_path)" alt="">
+                        <div style="padding: 0 30px">
+                            <img class="movie-poster" :src="setImageLink(movieData.poster_path)" alt="" style="text-align: left">
+                            <br>
+                            <div style="text-align: right; width: 200px; margin: 0 auto">
+
+                                <div class="movie-info-item">
+                                    <label class="movie-label" for="" v-if="movieData.release_date">Release Date</label>
+                                    <p class="movie-info-value">{{movieData.release_date}}</p>
+                                </div>
+                                <div class="movie-info-item">
+                                    <label class="movie-label" for="" v-if="movieData.release_date">Release Date</label>
+                                    <p class="movie-info-value">{{movieData.release_date}}</p>
+                                </div>
+                                <div class="movie-info-item">
+                                    <label class="movie-label" for="" v-if="movieData.genres.length > 0">Genre</label>
+                                    <p class="movie-info-value">{{getGenre(movieData.genres || [] )}}</p>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                     <div class="column">
-                        <label class="movie-label" for="" v-if="movieData.genres.length > 0">Genre</label>
-                        <p>{{getGenre(movieData.genres || [] )}}</p>
-                        <label for="" v-if="movieData.overview">Plot</label>
-                        <p>{{movieData.overview}}</p>
+                        <div style="padding: 0 30px">
+                            <h2 class=""  v-if="movieData.tagline"  style="font-family: 'Roboto Slab', serif; font-weight: bold; font-size: 3rem; text-align: left">
+                                {{movieData.tagline}}
+                            </h2>
+
+                            <p class="movie-info-overview">{{movieData.overview}}</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -39,6 +58,7 @@ export default {
     data() {
         return {
             id : '',
+            imdb_id: '',
             movieData: []
         }
     },
@@ -83,12 +103,28 @@ export default {
                 this.movieData = []
                 if(result) {
                     this.movieData = result.data
+                    if(this.movieData.imdb_id) {
+                        this.getImdbMovieData(this.movieData.imdb_id)
+                    }
                 }
             })
             .catch((error) => {
                 throw error
             })
 
+        },
+        getImdbMovieData(id) {
+            console.log('id', id)
+            this.imdb_id = id
+            const baseURI = `http://www.omdbapi.com/?i=`+this.imdb_id+`&apikey=aa697ef1`
+            this.$http.get(baseURI)
+            .then((result) => {
+                console.log('IMBDB RESULT', result)
+
+            })
+            .catch((error) => {
+                throw error
+            })
         }
     },
 
@@ -100,7 +136,7 @@ export default {
 </script>
 <style>
 .movie-info {
-    padding: 50px 10px 10px 10px;
+    padding: 100px 10px 10px 10px;
 }
 
 .release-date {
@@ -113,7 +149,51 @@ export default {
 }
 
 .movie-poster {
-    height: 350px;
+    height: 300px;
+    border-radius: 8px;
+}
+
+.movie-title {
+    font-size: 70px !important;
+    text-align: left;
+
+}
+.movie-label {
+    font-size: 1.5em;
+    text-align: right;
+    font-stretch: condensed;
+    font-kerning: initial;
+    font-stretch: expanded;
+    letter-spacing: 2px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    font-family: 'Roboto Slab', serif;
+}
+
+.movie-info-overview {
+    font-size: 20px;
+    text-align: justify;
+    line-height: 2em;
+    margin-top: 30px;
+}
+
+.movie-info-item {
+    margin-top: 20px;
+}
+.movie-info-item  + .movie-info-item {
+    margin-top: 40px;
+}
+.movie-info-value {
+    font-size: 20px;
+    text-align: right;
+    line-height: 2em;
+}
+.movie-info-item::after  {
+    content: '';
+    border-bottom: 2px solid #ccc;
+    width: 30px;
+    display: block;
+    margin-left: auto;
 }
 
 </style>
