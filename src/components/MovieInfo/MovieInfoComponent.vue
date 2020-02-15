@@ -14,7 +14,7 @@
         <div class="container">
             <div class="movie-info">
                 <div class="columns">
-                    <div class="column is-two-fifths">
+                    <div class="column is-two-fifths movie-item-side">
                         <div style="padding: 0 30px">
                             <img class="movie-poster" :src="setImageLink(movieData.poster_path)" alt="" style="text-align: left">
                             <br>
@@ -25,24 +25,31 @@
                                     <p class="movie-info-value">{{movieData.release_date}}</p>
                                 </div>
                                 <div class="movie-info-item">
-                                    <label class="movie-label" for="" v-if="movieData.release_date">Release Date</label>
-                                    <p class="movie-info-value">{{movieData.release_date}}</p>
+                                    <label class="movie-label" for="" v-if="imdbData.Director">Directed By</label>
+                                    <p class="movie-info-value">{{imdbData.Director}}</p>
                                 </div>
                                 <div class="movie-info-item">
                                     <label class="movie-label" for="" v-if="movieData.genres.length > 0">Genre</label>
                                     <p class="movie-info-value">{{getGenre(movieData.genres || [] )}}</p>
-                                </div>
+                                </div>                                
                             </div>
                         </div>
 
                     </div>
-                    <div class="column">
+                    <div class="column movie-item-body">
                         <div style="padding: 0 30px">
                             <h2 class=""  v-if="movieData.tagline"  style="font-family: 'Roboto Slab', serif; font-weight: bold; font-size: 3rem; text-align: left">
                                 {{movieData.tagline}}
                             </h2>
-
                             <p class="movie-info-overview">{{movieData.overview}}</p>
+                            <div class="rating">
+                                <div class="columns">
+                                    <div class="column">
+
+                                    </div>
+                                </div>  
+                            </div>
+                            <!-- <Rating/> -->
                         </div>
                     </div>
                 </div>
@@ -53,15 +60,24 @@
 
 </template>
 <script>
+
+// import Rating from '@/components/Rating/RatingComponent'
+import MovieInfoMixin from '@/mixins/MovieInfoMixin.vue'
 export default {
 
     data() {
         return {
             id : '',
             imdb_id: '',
-            movieData: []
+            movieData: [],
+            imdbData: []
         }
     },
+    components: {
+        // Rating
+    },
+
+    mixins: [ MovieInfoMixin ],
 
     watch: {
        '$route.params.id': function () {
@@ -69,69 +85,9 @@ export default {
         }
     },
 
-    methods: {
-        setDate(date_value) {
-            return date_value.substring(0, 4)
-        },
-        addStyle(backdrop_path) {
-            let styleObject = {
-                backgroundImage: 'url('+this.setImageLink(backdrop_path)+')',
-                backgroundSize: 'cover'
-            }
-            return styleObject;
-        },
-
-        setImageLink(imgSource) {
-            return 'https://image.tmdb.org/t/p/original'+imgSource;
-        },
-
-        getGenre(genre) {
-            console.log(genre)
-            let genreList = []
-            genre.forEach(element => {
-                return genreList.push(element.name);
-            });
-           return genreList.join(', ')
-
-        },
-        getMovieData() {
-            this.id = this.$route.params.id
-            const baseURI = `https://api.themoviedb.org/3/movie/`+this.id+`?api_key=0466c61e514a5b0f3783669a41c3b768`
-            this.$http.get(baseURI)
-            .then((result) => {
-                console.log('RSULT', result)
-                this.movieData = []
-                if(result) {
-                    this.movieData = result.data
-                    if(this.movieData.imdb_id) {
-                        this.getImdbMovieData(this.movieData.imdb_id)
-                    }
-                }
-            })
-            .catch((error) => {
-                throw error
-            })
-
-        },
-        getImdbMovieData(id) {
-            console.log('id', id)
-            this.imdb_id = id
-            const baseURI = `http://www.omdbapi.com/?i=`+this.imdb_id+`&apikey=aa697ef1`
-            this.$http.get(baseURI)
-            .then((result) => {
-                console.log('IMBDB RESULT', result)
-
-            })
-            .catch((error) => {
-                throw error
-            })
-        }
-    },
-
     created() {
         this.getMovieData()
     },
-
 }
 </script>
 <style>
@@ -146,6 +102,7 @@ export default {
     right: 0;
     font-weight: bold;
     opacity: 0.5;
+    padding-right: 30px;
 }
 
 .movie-poster {
@@ -156,6 +113,7 @@ export default {
 .movie-title {
     font-size: 70px !important;
     text-align: left;
+    padding-left: 30px;
 
 }
 .movie-label {
@@ -183,18 +141,32 @@ export default {
 .movie-info-item  + .movie-info-item {
     margin-top: 40px;
 }
+
+.movie-item-body .movie-info-value{
+    text-align: left;
+}
+.movie-item-body .movie-info-value{
+    text-align: left;
+}
+.movie-item-body .movie-info-item {
+    text-align: left !important;
+}
 .movie-info-value {
     font-size: 20px;
-    text-align: right;
+    /* text-align: right; */
     line-height: 2em;
 }
+
 .movie-info-item::after  {
     content: '';
     border-bottom: 2px solid #ccc;
     width: 30px;
     display: block;
+}
+.movie-item-side .movie-info-item::after {
     margin-left: auto;
 }
+
 
 </style>
 

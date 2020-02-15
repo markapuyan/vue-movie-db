@@ -7,8 +7,9 @@ import 'buefy/dist/buefy.css'
 import axios from 'axios'
 import VueLodash from 'vue-lodash'
 import VueCarousel from 'vue-carousel';
+import VueCircle from 'vue2-circle-progress'
 Vue.use(VueCarousel);
-
+Vue.use(VueCircle);
 
 const options = { name: 'lodash' } // customize the way you want to call it
 Vue.use(VueLodash, options) // options is optional
