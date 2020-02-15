@@ -1,16 +1,8 @@
 <template>
     <div class="movie-item">
-        <div class="card">
-            <div class="overlay">
-                <div class="overlay-title">
-                    <h1>
-                        <strong>{{item.title || item.name }}</strong>
-                    </h1>
-                    <p>{{ item.overview }}</p>
-                </div>
-            </div>
+        <div class="card" @click="goTo(item)">
             <div class="card-image">
-                <img :src="getImageLink(item.poster_path)" alt="">
+                <img class="movie-item-img" :src="getImageLink(item.poster_path)" alt="">
                 <br>
             </div>
         </div>
@@ -31,6 +23,10 @@ export default {
         getImageLink(imgSource) {
             return 'https://image.tmdb.org/t/p/original'+imgSource;
         },
+        goTo(item) {
+            console.log(item)
+            this.$router.push({path: `/movie/${item.id}`})
+        }
     },
 
     mounted() {
@@ -86,5 +82,9 @@ export default {
 
 .overlay:hover .overlay-title p {
     display: block;
+}
+
+.movie-item-img {
+    border-radius: 5px;
 }
 </style>

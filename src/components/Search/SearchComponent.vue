@@ -35,7 +35,7 @@
     </section>
 </template>
 <script>
-import _ from 'lodash';
+import SearchMixin from '@/mixins/SearchMixin'
 export default {
     data() {
         return {
@@ -45,32 +45,8 @@ export default {
             isFetching: false
         }
     },
-
+    mixins: [SearchMixin],
     methods: {
-        getAsyncData: _.debounce( function (searchName) {
-            if(!searchName.length) {
-                this.data = []
-                return
-            }
-            this.isFetching = true
-            const baseURI = `https://api.themoviedb.org/3/search/movie?api_key=0466c61e514a5b0f3783669a41c3b768&query=${searchName}`
-            this.$http.get(baseURI)
-            .then((result) => {
-                console.log('RSULT', result.data.results)
-                this.data = [];
-                if(result.data.results) {
-                    result.data.results.forEach((item) => this.data.push(item))
-                }
-            })
-            .catch((error) => {
-                this.data = []
-                throw error
-            })
-            .finally(() => {
-                this.isFetching = false
-            })
-        }, 500),
-
         goTo(option) {
             this.selected = option;
             this.$router.push({path: `/movie/${this.selected.id}`})
