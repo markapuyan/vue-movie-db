@@ -31,7 +31,7 @@
                                 <div class="movie-info-item">
                                     <label class="movie-label" for="" v-if="movieData.genres.length > 0">Genre</label>
                                     <p class="movie-info-value">{{getGenre(movieData.genres || [] )}}</p>
-                                </div>                                
+                                </div>
                             </div>
                         </div>
 
@@ -42,14 +42,15 @@
                                 {{movieData.tagline}}
                             </h2>
                             <p class="movie-info-overview">{{movieData.overview}}</p>
-                            <div class="rating">
+                            <div class="rating" v-if="imdbData.Ratings">
                                 <div class="columns">
-                                    <div class="column">
 
+                                    <div class="column" v-for="(ratings, index) in imdbData.Ratings" :key="index">
+                                        <Rating :rating_data="ratings"/>
                                     </div>
-                                </div>  
+                                </div>
                             </div>
-                            <!-- <Rating/> -->
+                            <Rating/>
                         </div>
                     </div>
                 </div>
@@ -61,7 +62,7 @@
 </template>
 <script>
 
-// import Rating from '@/components/Rating/RatingComponent'
+import Rating from '@/components/Rating/RatingComponent'
 import MovieInfoMixin from '@/mixins/MovieInfoMixin.vue'
 export default {
 
@@ -74,7 +75,7 @@ export default {
         }
     },
     components: {
-        // Rating
+        Rating
     },
 
     mixins: [ MovieInfoMixin ],

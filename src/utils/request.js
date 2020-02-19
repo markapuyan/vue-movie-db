@@ -1,11 +1,8 @@
 import axios from 'axios';
-
-
-
 class Request {
 
     constructor() {
-        this.moviedbUrl     =  'https://api.themoviedb.org/3/';
+        this.moviedbUrl     = 'https://api.themoviedb.org/3/';
         this.moviedbKey     = '0466c61e514a5b0f3783669a41c3b768';
         this.omdbUrl        = 'http://www.omdbapi.com/';
         this.omdbKey        = 'aa697ef1';
@@ -20,7 +17,7 @@ class Request {
         }
 
         if(type == 'info-imdb') {
-            params = Object.assign( objectParams , {apikey : this.omdbKey });
+            params = Object.assign( objectParams , {apikey : this.omdbKey});
         }
 
         let request_params = { params: params, crossDomain: true }
