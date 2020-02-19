@@ -30,45 +30,14 @@
 
 <script>
 import MovieItem from '@/components/MovieItems/MovieItem/MovieItemComponent'
+import FeaturedMovieMixin from '@/mixins/FeaturedMovieMixin.vue'
 export default {
-    data() {
-        return {
-            data: [],
-            limitationList:5,
-            trending: [{
-                id: 1,
-                name: 'Movie',
-                value: 'movie'
-            },{
-                id: 2,
-                name: 'TV Show',
-                value: 'tv'
-            }],
-            trendValue: 'movie'
-        }
-    },
+
+    mixins: [ FeaturedMovieMixin ],
     components: {
         MovieItem
     },
 
-    methods: {
-        setTrend(value) {
-            this.radio = value.value
-            this.getFeaturedMovie()
-        },
-        getFeaturedMovie() {
-            const baseURI = `https://api.themoviedb.org/3/trending/`+this.radio+`/day?api_key=0466c61e514a5b0f3783669a41c3b768`
-            this.$http.get(baseURI)
-            .then((result) => {
-                console.log('RSULT', result)
-                this.data = []
-                result.data.results.forEach((item) => this.data.push(item))
-            })
-            .catch((error) => {
-                throw error
-            })
-        }
-    },
     mounted() {
         this.getFeaturedMovie();
     },

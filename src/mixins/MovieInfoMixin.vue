@@ -1,36 +1,36 @@
 <script>
 import BaseMixin from './BaseMixin.vue'
+
+import Movie from "@/utils/api/Movie";
+
 export default {
+
+    data() {
+        return {
+            MovieApi : Movie
+        }
+    },
     mixins: [BaseMixin],
     methods: {
-        getMovieData() {
+        async getMovieData() {
             this.id = this.$route.params.id
-            const baseURI = this.movieDbApi.url+`movie/`+this.id+`?api_key=`+this.movieDbApi.key
-            this.$http.get(baseURI)
-            .then((result) => {
-                this.movieData = []
-                if(result) {
-                    this.movieData = result.data
-                    if(this.movieData.imdb_id) {
-                        this.getImdbMovieData(this.movieData.imdb_id)
-                    }
+            this.movieData = [];
+            let movieData = await this.MovieApi.getMovieData(this.id);
+
+            if (movieData.status === 200) {
+                this.movieData = movieData.data;
+                if(this.movieData.imdb_id) {
+                    this.getImdbMovieData(this.movieData.imdb_id)
                 }
-            })
-            .catch((error) => {
-                throw error
-            })
+            }
         },
-        
-        getImdbMovieData(id) {
+
+        async getImdbMovieData(id) {
             this.imdb_id = id
-            const baseURI = this.omdbApi.url+`?i=`+this.imdb_id+`&apikey=`+this.omdbApi.key
-            this.$http.get(baseURI)
-            .then((result) => {
-                this.imdbData = result.data
-            })
-            .catch((error) => {
-                throw error
-            })
+            let imdbData = await this.MovieApi.getImdbMovieData(this.imdb_id);
+            if (imdbData.status === 200) {
+                this.imdbData = imdbData.data;
+            }
         },
 
         setDate(date_value) {

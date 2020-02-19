@@ -1,30 +1,31 @@
 <script>
 import _ from 'lodash';
 import BaseMixin from './BaseMixin.vue'
+
+import Movie from "@/utils/api/Movie";
+
 export default {
+    data() {
+        return {
+            MovieApi : Movie
+        }
+    },
     mixins: [BaseMixin],
     methods: {
-        getAsyncData: _.debounce( function (searchName) {
+         getAsyncData: _.debounce( async function (searchName) {
             if(!searchName.length) {
                 this.data = []
                 return
             }
             this.isFetching = true
-            const baseURI = this.movieDbApi.url+`search/movie?api_key=`+this.movieDbApi.key+`&query=${searchName}`
-            this.$http.get(baseURI)
-            .then((result) => {
-                this.data = [];
-                if(result.data.results) {
-                    result.data.results.forEach((item) => this.data.push(item))
-                }
-            })
-            .catch((error) => {
-                this.data = []
-                throw error
-            })
-            .finally(() => {
+            let searchData = await this.MovieApi.getSearchData({query : searchName});
+            if(searchData.status === 200) {
                 this.isFetching = false
-            })
+                this.data = [];
+                if(searchData.data.results) {
+                    searchData.data.results.forEach((item) => this.data.push(item))
+                }
+            }
         }, 500),
     }
 }
