@@ -17,7 +17,7 @@
                 <div class="section-body">
                     <div class="container">
                         <carousel :perPage="5">
-                            <slide v-for="item in data" :key="item.id" >
+                            <slide v-for="item in allFeaturedMovies" :key="item.id" >
                                 <MovieItem :item="item" />
                             </slide>
                         </carousel>
@@ -29,16 +29,50 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex'
 import MovieItem from '@/components/MovieItems/MovieItem/MovieItemComponent'
 import FeaturedMovieMixin from '@/mixins/FeaturedMovieMixin.vue'
 export default {
+
+    data() {
+        return {
+            limitationList:5,
+            trending: [{
+                id: 1,
+                name: 'Movie',
+                value: 'movie'
+            },{
+                id: 2,
+                name: 'TV Show',
+                value: 'tv'
+            }],
+            trendValue: 'movie'
+        }
+    },
 
     mixins: [ FeaturedMovieMixin ],
     components: {
         MovieItem
     },
 
-    mounted() {
+    computed: {
+        ...mapGetters(['allFeaturedMovies'])
+    },
+
+    methods: {
+        ...mapActions(['getFeaturedMovies']),
+        setTrend(value) {
+            this.radio = value.value
+            this.getFeaturedMovie()
+        },
+        getFeaturedMovie() {
+
+            this.getFeaturedMovies(this.radio)
+
+        }
+    },
+
+    created() {
         this.getFeaturedMovie();
     },
 }

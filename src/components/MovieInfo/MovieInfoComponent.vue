@@ -1,5 +1,5 @@
 <template>
-    <Fragment>
+    <div>
         <section class="hero is-info is-large" :style="movieData.backdrop_path ? addStyle(movieData.backdrop_path) : ''">
             <div class="hero-body">
                 <div class="container">
@@ -25,11 +25,11 @@
                                     <p class="movie-info-value">{{movieData.release_date}}</p>
                                 </div>
                                 <div class="movie-info-item">
-                                    <label class="movie-label" for="" v-if="imdbData.Director">Directed By</label>
-                                    <p class="movie-info-value">{{imdbData.Director}}</p>
+                                    <label class="movie-label" for="" v-if="imdbMovieData.Director">Directed By</label>
+                                    <p class="movie-info-value">{{imdbMovieData.Director}}</p>
                                 </div>
                                 <div class="movie-info-item">
-                                    <label class="movie-label" for="" v-if="movieData.genres.length > 0">Genre</label>
+                                    <label class="movie-label" for="" v-if="movieData.genres">Genre</label>
                                     <p class="movie-info-value">{{getGenre(movieData.genres || [] )}}</p>
                                 </div>
                             </div>
@@ -42,52 +42,57 @@
                                 {{movieData.tagline}}
                             </h2>
                             <p class="movie-info-overview">{{movieData.overview}}</p>
-                            <div class="rating" v-if="imdbData.Ratings">
+                            <div class="rating">
                                 <div class="columns">
+                                    <div class="column">
 
-                                    <div class="column" v-for="(ratings, index) in imdbData.Ratings" :key="index">
-                                        <Rating :rating_data="ratings"/>
                                     </div>
-                                </div>
+                                </div>  
                             </div>
-                            <Rating/>
+                            <!-- <Rating/> -->
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </Fragment>
+    </div>
 
 
 </template>
 <script>
-
-import Rating from '@/components/Rating/RatingComponent'
+import { mapGetters, mapActions } from 'vuex'
 import MovieInfoMixin from '@/mixins/MovieInfoMixin.vue'
 export default {
 
     data() {
         return {
             id : '',
-            imdb_id: '',
-            movieData: [],
-            imdbData: []
         }
     },
     components: {
-        Rating
+        // Rating
     },
-
     mixins: [ MovieInfoMixin ],
+
+    computed: {
+        ...mapGetters(['movieData', 'imdbMovieData'])
+    },
 
     watch: {
        '$route.params.id': function () {
-            this.getMovieData()
+            this.getMovieData(this.$route.params.id)
         }
     },
 
+    methods: {
+        ...mapActions(['getMovieData', 'getImdbMovieData'])
+    },
+
+    mounted() {
+        this.getMovieData(this.$route.params.id)
+    },
     created() {
-        this.getMovieData()
+        
     },
 }
 </script>
