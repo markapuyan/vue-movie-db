@@ -31,7 +31,9 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import MovieItem from '@/components/MovieItems/MovieItem/MovieItemComponent'
+import FeaturedMovieMixin from '@/mixins/FeaturedMovieMixin.vue'
 export default {
+
     data() {
         return {
             limitationList:5,
@@ -47,6 +49,8 @@ export default {
             trendValue: 'movie'
         }
     },
+
+    mixins: [ FeaturedMovieMixin ],
     components: {
         MovieItem
     },
@@ -67,6 +71,7 @@ export default {
 
         }
     },
+
     created() {
         this.getFeaturedMovie();
     },

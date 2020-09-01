@@ -1,41 +1,59 @@
 <template>
-    <VueCircle
-        :progress="50"
-        :size="100"
-        :reverse="false"
-        line-cap="round"
-        :fill="fill"
-        empty-fill="rgba(0, 0, 0, .1)"
-        :animation-start-value="0.0"
-        :start-angle="0"
-        insert-mode="append"
-        :thickness="5"
-        :show-percent="true"
-        @vue-circle-progress="progress"
-        @vue-circle-end="progress_end">
-          <p>Slot!</p>
-      </VueCircle>
+    <div class="column">
+      <radial-progress-bar
+        :diameter="120"
+        :completed-steps="getCompletedSteps(rating_data.Value)"
+        :total-steps="totalSteps"
+        :strokeWidth="5"
+        :innerStrokeColor='color'
+        >
+    <span>{{rating_data.Value}}</span>
+    </radial-progress-bar>
+    <p>{{rating_data.Source}}</p>
+    {{sample}}
+    </div>
+
 </template>
 <script>
+import RadialProgressBar from 'vue-radial-progress'
 export default {
-    
+    props: {
+        rating_data : Object
+    },
     data() {
         return {
-
-             fill : { gradient: ["red", "green", "blue"] },
+          completedSteps: 95,
+          totalSteps: 0,
+          color: '#ccc',
+          animation: 'ease-in',
+          sample: ''
         }
     },
+      components: {
+       RadialProgressBar
+    },
     methods:{
-      progress(event,progress,stepValue){
-          let a = event;
-          let progress1 = progress;
-        console.log(a, progress1, stepValue);
-      },
-      progress_end(event){
-          let a = event;
-        console.log("Circle progress end", a);
+      getCompletedSteps(value) {
+        let value1 = 0;
+        if(this.rating_data.Source == 'Internet Movie Database') {
+          value1 = Number(value.substring(0, 3));
+          this.totalSteps = 10;
+          }
+        else if (this.rating_data.Source == 'Rotten Tomatoes') {
+          value1 = Number(value.substring(0, 2));
+          this.totalSteps = 100;
+        } else {
+          value1 = Number(value.substring(0, 2));
+          this.totalSteps = 100;
+        }
+        return value1;
       }
-    }
-
+    },
 }
 </script>
+
+<style>
+.radial-progress-container {
+  margin: 0 auto;
+}
+</style>
