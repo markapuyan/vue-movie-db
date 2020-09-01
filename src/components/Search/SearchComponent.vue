@@ -7,7 +7,7 @@
                 </h1>
                 <b-autocomplete
                     size="is-large"
-                    :data="data"
+                    :data="searchData"
                     placeholder="e.g. Fight Club"
                     field="title"
                     :loading="isFetching"
@@ -35,17 +35,19 @@
     </section>
 </template>
 <script>
+import {mapGetters} from 'vuex'
 import SearchMixin from '@/mixins/SearchMixin'
 export default {
     data() {
         return {
             searchName: '',
-            data: [],
             selected: null,
-            isFetching: false
         }
     },
     mixins: [SearchMixin],
+    computed: {
+        ...mapGetters(['isFetching', 'searchData'])
+    },
     methods: {
         goTo(option) {
             this.selected = option;

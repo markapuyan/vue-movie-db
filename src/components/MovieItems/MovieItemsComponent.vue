@@ -17,7 +17,7 @@
                 <div class="section-body">
                     <div class="container">
                         <carousel :perPage="5">
-                            <slide v-for="item in data" :key="item.id" >
+                            <slide v-for="item in allFeaturedMovies" :key="item.id" >
                                 <MovieItem :item="item" />
                             </slide>
                         </carousel>
@@ -29,11 +29,11 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex'
 import MovieItem from '@/components/MovieItems/MovieItem/MovieItemComponent'
 export default {
     data() {
         return {
-            data: [],
             limitationList:5,
             trending: [{
                 id: 1,
@@ -51,25 +51,23 @@ export default {
         MovieItem
     },
 
+    computed: {
+        ...mapGetters(['allFeaturedMovies'])
+    },
+
     methods: {
+        ...mapActions(['getFeaturedMovies']),
         setTrend(value) {
             this.radio = value.value
             this.getFeaturedMovie()
         },
         getFeaturedMovie() {
-            const baseURI = `https://api.themoviedb.org/3/trending/`+this.radio+`/day?api_key=0466c61e514a5b0f3783669a41c3b768`
-            this.$http.get(baseURI)
-            .then((result) => {
-                console.log('RSULT', result)
-                this.data = []
-                result.data.results.forEach((item) => this.data.push(item))
-            })
-            .catch((error) => {
-                throw error
-            })
+
+            this.getFeaturedMovies(this.radio)
+
         }
     },
-    mounted() {
+    created() {
         this.getFeaturedMovie();
     },
 }
