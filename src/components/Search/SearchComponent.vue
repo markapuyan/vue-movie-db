@@ -54,8 +54,11 @@ export default {
         }, 500),
 
         goTo(option) {
-            this.selected = option;
-            this.$router.push({path: `/movie/${this.selected.id}`})
+            if(option !== undefined && option !== null) {
+                this.selected = option;
+                const path = `/movie/${this.selected.id}`
+                if (this.$route.path !== path) this.$router.push(path)
+            }
         }
     }
 }
