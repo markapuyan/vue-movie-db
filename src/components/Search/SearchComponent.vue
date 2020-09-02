@@ -3,7 +3,7 @@
         <div class="hero-body">
             <div class="container">
                 <h1 class="title">
-                    <!-- Movie Search -->
+                    Movie Search
                 </h1>
                 <b-autocomplete
                     size="is-large"
@@ -63,3 +63,8 @@ export default {
     }
 }
 </script>
+<style scoped>
+    .title {
+        text-align: left;
+    }
+</style>
