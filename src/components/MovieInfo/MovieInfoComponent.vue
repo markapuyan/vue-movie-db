@@ -47,9 +47,13 @@
                                     <div class="column">
 
                                     </div>
-                                </div>  
+                                </div> 
                             </div>
-                            <!-- <Rating/> -->
+                            <div v-if="imdbMovieData.Ratings" class="columns">
+                                <div v-for="(rating, index) in imdbMovieData.Ratings" :key="index">
+                                     <Rating :rating_data="rating"/>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -60,6 +64,7 @@
 
 </template>
 <script>
+import Rating from '@/components/Rating/RatingComponent.vue'
 import { mapGetters, mapActions } from 'vuex'
 import MovieInfoMixin from '@/mixins/MovieInfoMixin.vue'
 export default {
@@ -70,7 +75,7 @@ export default {
         }
     },
     components: {
-        // Rating
+        Rating
     },
     mixins: [ MovieInfoMixin ],
 
