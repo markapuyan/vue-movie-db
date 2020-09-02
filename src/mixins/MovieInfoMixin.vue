@@ -1,7 +1,5 @@
 <script>
-import BaseMixin from './BaseMixin.vue'
 export default {
-    mixins: [BaseMixin],
     methods: {
         setDate(date_value) {
             return date_value.substring(0, 4)
@@ -16,7 +14,7 @@ export default {
         },
 
         setImageLink(path) {
-            return this.imageSource + path;
+            return process.env.VUE_APP_IMAGESOURCE + path;
         },
 
         getGenre(genre) {
