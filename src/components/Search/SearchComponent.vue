@@ -35,8 +35,8 @@
     </section>
 </template>
 <script>
-import {mapGetters} from 'vuex'
-import SearchMixin from '@/mixins/SearchMixin'
+import _ from 'lodash';
+import {mapGetters, mapActions} from 'vuex'
 export default {
     data() {
         return {
@@ -44,11 +44,15 @@ export default {
             selected: null,
         }
     },
-    mixins: [SearchMixin],
     computed: {
         ...mapGetters(['isFetching', 'searchData'])
     },
     methods: {
+        ...mapActions(['getSearchMovie']),
+        getAsyncData: _.debounce( function (searchName) {
+            this.getSearchMovie(searchName)
+        }, 500),
+
         goTo(option) {
             this.selected = option;
             this.$router.push({path: `/movie/${this.selected.id}`})
