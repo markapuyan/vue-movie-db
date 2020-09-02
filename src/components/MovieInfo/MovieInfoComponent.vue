@@ -45,7 +45,6 @@
                             <div class="rating">
                                 <div class="columns">
                                     <div class="column">
-
                                     </div>
                                 </div> 
                             </div>
